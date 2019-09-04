@@ -420,53 +420,42 @@ Window {
         color: "#00000000"
 
         Text {
-            id: serverDroneRoute
-            x: 168
-            y: 0
-            width: 45
-            height: 15
-            text: qsTr("---")
-            font.pixelSize: 14
-            horizontalAlignment: Text.AlignHCenter
-        }
-
-        Text {
-            id: clientServerRoute
-            x: 58
-            y: 0
-            width: 45
-            height: 15
-            text: qsTr("---")
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 14
-        }
-
-        Text {
             id: drone
-            x: 226
+            x: 119
             y: 0
-            text: qsTr("Drone")
+            width: 40
+            height: 15
+            text: qsTr("Drone:")
             font.pixelSize: 12
         }
 
         Text {
             id: server
-            x: 122
+            x: 1
             y: -1
-            text: qsTr("Server")
+            text: qsTr("Server:")
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 14
         }
 
         Text {
-            id: client
-            x: 0
+            id: text1
+            x: 60
             y: 0
-            width: 52
+            width: 46
             height: 15
-            text: qsTr("Client")
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 14
+            text: qsTr("Offline")
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: text2
+            x: 165
+            y: 0
+            width: 46
+            height: 15
+            text: qsTr("Offline")
+            font.pixelSize: 12
         }
 
 
