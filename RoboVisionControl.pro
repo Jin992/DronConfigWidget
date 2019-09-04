@@ -13,7 +13,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    droneconfig.cpp \
+    tcpclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -27,3 +29,10 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    droneconfig.h \
+    tcpclient.h
+
+INCLUDEPATH += C:\boost_1_67_0
+LIBS += "-LC:\boost_1_67_0\lib32-msvc-14.0"
