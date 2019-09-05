@@ -56,9 +56,9 @@ Window {
 
         Rectangle {
             id: cmdInputFrame
-            x: 12
-            y: 33
-            width: 510
+            x: 30
+            y: 250
+            width: 604
             height: 24
             color: "#00000000"
             border.color: "#37383d"
@@ -67,25 +67,36 @@ Window {
             TextInput {
                 id: cmdInput
                 x: 4
-                y: 8
-                width: 506
+                y: 4
+                width: 600
                 height: 20
-                text: curInCmd
+                focus: true
                 font.family: "Times New Roman"
                 font.capitalization: Font.AllLowercase
-                font.pixelSize: 12
-                onFocusChanged:{
-                    historyBox.visible = !historyBox.visible
-                }
-            }
+                font.pixelSize: 14
+                property int listCnt: 0
+                Keys.onReturnPressed: {
+                    var line = {
+                        textIn:cmdInput.text
+                    }
+                    if (find(listModel, function(item) { return item.textIn === cmdInput.text }) === null) {
+                        listModel.append(line)
+                    }
+                    controlServer.sendToDrone("{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + cmdInput.text + "\"}}")
 
-            Label {
-                id: cmdInputLbl
-                x: 0
-                y: -24
-                width: 263
-                height: 18
-                text: qsTr("Command:")
+                }
+                Keys.onDownPressed: {
+                    if (listCnt < listModel.count - 1) {
+                        listCnt++
+                        curInCmd = listModel.get(listCnt).textIn
+                    }
+                }
+                Keys.onUpPressed: {
+                    if (listCnt > 0) {
+                        listCnt--;
+                        curInCmd = listModel.get(listCnt).textIn
+                    }
+                }
             }
         }
 
@@ -115,119 +126,49 @@ Window {
                 }
                 root.close()}
         }
-        Button {
-            id: executeBtn
-            x: 531
-            y: 34
-            width: 94
-            height: 25
-            text: qsTr("Execute")
-            onClicked: {
-                var line = {
-                    textIn:cmdInput.text
-                }
-                if (find(listModel, function(item) { return item.textIn === cmdInput.text }) === null) {
-                    listModel.append(line)
-                }
-                controlServer.sendToDrone("{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + cmdInput.text + "\"}}")
-            }
+
+        Text {
+            id: inLabel
+            x: 13
+            y: 253
+            text: qsTr("->")
+            font.pixelSize: 13
         }
     }
 
     Rectangle {
         id: cmdOutFrame
-        x: 12
-        y: 97
-        width: 620
-        height: 177
+        x: 10
+        y: 19
+        width: 624
+        height: 228
         color: "#00000000"
         border.color: "#37383d"
         border.width: 2
 
-
-        Label {
-            id: cmdOutLabel
-            x: 0
-            y: -24
-            width: 163
-            height: 18
-            text: qsTr("Drone Response:")
-        }
 
         ScrollView {
             id: scrollView
             x: 0
             y: 0
             width: 620
-            height: 177
+            height: 228
 
             TextArea {
                 id: cmdOut
                 x: 0
                 y: 0
                 width: 620
-                height: 177
+                height: 227
                 text: controlServer.cmdResult
+                selectByMouse: true
                 padding: 4
                 wrapMode: Text.NoWrap
             }
         }
     }
 
-    Rectangle {
-        id: historyBox
-        visible: false
-        x: 14
-        y: 55
-        width: 506
-        height: listModel.count * 20 < 200 ?  listModel.count * 20 : 200
-        color: "#ffffff"
-        border.width: 1
-        z: 0
-
-
-        ListView {
-            id: listView
-            x: 5
-            y: 0
-            width: 501
-            height: 200
-            scale: 1
-            keyNavigationWraps: true
-            cacheBuffer: 200
-            contentHeight: 150
-            boundsBehavior: Flickable.StopAtBounds
-            flickDeceleration: 200
-            maximumFlickVelocity: 400
-            z: 0
-            clip:true
-            model: ListModel {
-                id: listModel
-            }
-            delegate: Item {
-                width: parent.width
-                height: 20
-
-                Text {
-                   text: textIn
-                   font.pointSize: 10
-                   anchors.verticalCenter: parent.verticalCenter
-                   font.bold: false
-                }
-                MouseArea {
-                   anchors.fill: parent
-                   z: 1
-                   onClicked:{
-                       curInCmd = textIn
-                   }
-                }
-            }
-        }
-
+    ListModel {
+        id: listModel
     }
 }
-
-/*##^## Designer {
-    D{i:62;anchors_height:200;anchors_width:506;anchors_x:0;anchors_y:0}
-}
- ##^##*/

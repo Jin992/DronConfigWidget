@@ -128,9 +128,18 @@ Window {
                     font.pixelSize: 14
                     echoMode: TextInput.Normal
                     inputMask: ""
-                    onFocusChanged:{
-                        historyBoxIp.visible = !historyBoxIp.visible
-                        print(historyBoxIp.visible)
+                    property int listCnt: 0
+                    Keys.onDownPressed: {
+                        if (listCnt < listModelIp.count - 1) {
+                            listCnt++
+                            curIp = listModelIp.get(listCnt).textIn
+                        }
+                    }
+                    Keys.onUpPressed: {
+                        if (listCnt > 0) {
+                            listCnt--;
+                            curIp = listModelIp.get(listCnt).textIn
+                        }
                     }
                 }
 
@@ -167,53 +176,8 @@ Window {
                 }
             }
 
-            Rectangle {
-                id: historyBoxIp
-                visible: false
-                x: 11
-                y: 38
-                width: 164
-                height: listModelIp.count * 20 < 60 ?  listModelIp.count * 20 : 60
-                color: "#ffffff"
-                border.width: 1
-                z: 1
-                ListView {
-                    id: listViewIp
-                    x: 0
-                    y: 0
-                    width: 164
-                    height: 60
-                    scale: 1
-                    keyNavigationWraps: true
-                    cacheBuffer: 200
-                    contentHeight: 150
-                    boundsBehavior: Flickable.StopAtBounds
-                    flickDeceleration: 200
-                    maximumFlickVelocity: 400
-                    z: 0
-                    clip:true
-                    model: ListModel {
-                        id: listModelIp
-                    }
-                    delegate: Item {
-                        width: parent.width
-                        height: 20
-
-                        Text {
-                           text: textIn
-                           font.pointSize: 10
-                           anchors.verticalCenter: parent.verticalCenter
-                           font.bold: false
-                        }
-                        MouseArea {
-                           anchors.fill: parent
-                           z: 1
-                           onClicked:{
-                              curIp = textIn
-                           }
-                        }
-                    }
-                }
+            ListModel {
+                id: listModelIp
             }
         }
 
