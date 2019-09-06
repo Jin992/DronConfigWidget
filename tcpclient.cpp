@@ -187,7 +187,6 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
             } else if (name == "bitrate") {
                 float bitrate = static_cast<float>(json["data"].toDouble());
                 _set_bitrate(bitrate);
-                qDebug() << bitrate;
             }
         } else {
             _error_action(error.message());
@@ -279,5 +278,20 @@ void TCPClient::_error_action(const std::string &msg){
     //_set_try_connect(false);
     _io.stop();
     _ui_msg_func(msg);
+}
+
+void TCPClient::stop(void) {
+    boost::system::error_code err;
+    _off_timer.cancel();
+    _ping_pong_timer.cancel();
+    if (_socket.is_open()) {
+        _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, err);
+        if (err)
+            return;
+        _socket.close(err);
+        if (err)
+            return;
+        _io.stop();
+    }
 }
 

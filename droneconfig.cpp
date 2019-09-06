@@ -5,7 +5,8 @@
 
 DroneConfig::DroneConfig(QObject *parent)
 : QObject(parent), _videoStatus(false), _connectionStatus(false),
-  _videoBitrate(0.0), _networkRssi(-128), _networkType("NO_CON"), _try_connect(false), _serverIp("127.0.0.1"), _serverPort("25095")
+  _videoBitrate(0.0), _networkRssi(-128), _networkType("NO_CON"),
+  _try_connect(false), _serverIp("127.0.0.1"), _serverPort("25095"), _net_client(true)
 {
     setVideoStatus(true);
 }
@@ -177,4 +178,19 @@ void DroneConfig::setBaseFilePath(const char *path) {
     std::string newPath(pathStr.begin(), pathStr.begin() + (pathStr.rfind("/") + 1));
     _basePath = std::string(newPath).c_str();
     qDebug() << "Base path  >>> " << _basePath;
+}
+
+void DroneConfig::setClientStopFunc(std::function<void(void)> func) {
+    _stop_tcp = func;
+}
+
+void DroneConfig::stop_net_client(){
+    _net_client.store(false);
+    if (_try_connect == true && !_serverIp.isEmpty() && !_serverPort.isEmpty())
+        _stop_tcp();
+   std::this_thread::sleep_for (std::chrono::seconds(1));
+}
+
+bool DroneConfig::netClient() const {
+    return _net_client;
 }

@@ -158,9 +158,9 @@ Window {
 
                 TextInput {
                     id: missionNameInput
-                    x: 0
-                    y: 8
-                    width: 359
+                    x: 5
+                    y: 6
+                    width: 354
                     height: 20
                     echoMode: TextInput.Normal
                     font.pixelSize: 12
@@ -168,8 +168,8 @@ Window {
 
                 Label {
                     id: missionNameLabel
-                    x: -114
-                    y: 3
+                    x: -105
+                    y: 4
                     text: qsTr("Mission name:")
                 }
             }
@@ -181,6 +181,12 @@ Window {
                 width: 62
                 height: 23
                 text: qsTr("start")
+                onClicked: {
+                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ';date) >> /home/pi/Desktop/mission.txt"
+                    var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
+                    controlServer.sendToDrone(cmd.toString())
+                    print(cmd.toString())
+                }
             }
 
             Button {
@@ -190,6 +196,12 @@ Window {
                 width: 62
                 height: 23
                 text: qsTr("end")
+                onClicked: {
+                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + " ';date) >> /home/pi/Desktop/mission.txt"
+                    var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
+                    controlServer.sendToDrone(cmd.toString())
+                    print(cmd.toString())
+                }
             }
         }
     }

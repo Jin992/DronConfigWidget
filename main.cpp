@@ -9,13 +9,14 @@
 
 void network(DroneConfig &config) {
    //qDebug() << "network maganer before while";
-    while (true) {
+    while (config.netClient()) {
         if (!config.serverIp().isEmpty() && !config.serverPort().isEmpty()) {
             if (config.tryConnect() == true) {
                 //qDebug() << "cmd to connect";
                 // Define network manager
                 TCPClient client(config.serverIp().toStdString(), config.serverPort().toStdString());
                 config.setSendToDroneFunc([&](std::string msg){client.async_send(msg);});
+                config.setClientStopFunc([&](){client.stop();});
                 // pass connection set function from UI to network manager object
                 client.setConnectionStatusFunc([&](const bool &connectionStatus){config.setConnectionStatus(connectionStatus);});
                 // pass telemetry set function from UI to network manager object
@@ -57,6 +58,9 @@ int main(int argc, char *argv[])
     //                                        &controlServer, SLOT(sendToDrone(QString)));
     if (engine.rootObjects().isEmpty())
         return -1;
-
-    return app.exec();
+    int32_t res = app.exec();
+    if (networkManager.joinable()){
+        networkManager.join();
+    }
+    return res;
 }

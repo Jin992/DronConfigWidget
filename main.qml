@@ -397,7 +397,10 @@ Window {
             x: 35
             y: 62
             text: qsTr("Yes")
-            onClicked:{root.close()}
+            onClicked:{
+                controlServer.stop_net_client()
+                Qt.quit()}
+
         }
 
         Button {

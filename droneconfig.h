@@ -34,6 +34,8 @@ public:
     void setSendToDroneFunc(std::function<void(std::string msg)> func);
     void setCmdResult(const QString &msg);
     void _setVideoBitrate(float bitrate);
+    void setClientStopFunc(std::function<void(void)> func);
+
 
     // get functions
     bool connectionStatus();
@@ -47,6 +49,7 @@ public:
     QString serverPort() const;
     QString uiMsg();
     QString cmdResult()const;
+    bool netClient() const;
 
     void setBaseFilePath(const char *path);
 
@@ -66,6 +69,7 @@ public slots:
     void sendToDrone(const QString &msg);
     bool writeHistory(const QString& file, const QString& data);
     QString readHistory(const QString& file);
+    void stop_net_client();
 
 private:
     // private set functions
@@ -85,6 +89,8 @@ private:
     std::function<void(std::string msg)> _send_to_network;
     QString _cmdResult;
     QString _basePath;
+    std::function<void (void)>  _stop_tcp;
+    std::atomic<bool>       _net_client;
 };
 
 #endif // DRONECONFIG_H

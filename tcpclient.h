@@ -27,6 +27,7 @@ public:
     void setCmdResSetFunc(std::function<void (const std::string &)> func);
     void setBitrateSetFunc(std::function <void(float)> func);
     void startPingPong();
+    void stop();
 
 private:
     void _error_action(const std::string &msg);
