@@ -76,8 +76,7 @@ void DroneConfig::_setNetworkType(const QString &networkType) {
     emit networkTypeChanged();
 }
 
-void DroneConfig::assingTelemData(float bitrate, int rssi, const std::string networkType, bool videoStatus){
-    _setVideoBitrate(bitrate);
+void DroneConfig::assingTelemData(int rssi, const std::string networkType, bool videoStatus){
     _setNetworkRssi(rssi);
     _setNetworkType(networkType.c_str());
     setVideoStatus(videoStatus);

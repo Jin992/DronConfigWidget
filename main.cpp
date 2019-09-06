@@ -19,7 +19,7 @@ void network(DroneConfig &config) {
                 // pass connection set function from UI to network manager object
                 client.setConnectionStatusFunc([&](const bool &connectionStatus){config.setConnectionStatus(connectionStatus);});
                 // pass telemetry set function from UI to network manager object
-                client.setTelemFunc([&](float bt, int rssi, const std::string &net_type, bool videoStatus) { config.assingTelemData(bt, rssi, net_type, videoStatus);});
+                client.setTelemFunc([&](int rssi, const std::string &net_type, bool videoStatus) { config.assingTelemData(rssi, net_type, videoStatus);});
                 // pass tryConnection flag get function from UI to network manager object
                 client.getTryConnectStatusFunc([&]()->bool{return config.tryConnect();});
                 // pass tryConnection flag set function from UI to network manager object
@@ -27,14 +27,15 @@ void network(DroneConfig &config) {
                 // pass uiMsg function to network manager object
                 client.setUiMsgFunc([&](const std::string &msg){config.setUiMsg(msg.c_str());});
                 client.setCmdResSetFunc([&](const std::string &res){config.setCmdResult(res.c_str());});
+                // pass video bitrete setter
+                client.setBitrateSetFunc([&](float bitrate){config._setVideoBitrate(bitrate);});
                 // start connection timer to check tryConnection flag state
                 client.startConnectTimer();
                 // start connection manager event loop
                 client.run();
             }
-
         }
-        sleep(1);
+        std::this_thread::sleep_for (std::chrono::seconds(1));
     }
 }
 
@@ -52,8 +53,8 @@ int main(int argc, char *argv[])
     std::thread networkManager(network, std::ref(controlServer));
     engine.rootContext()->setContextProperty("controlServer", &controlServer);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    QObject::connect(engine.rootContext(), SIGNAL(sendToDrone(QString)),
-                                            &controlServer, SLOT(sendToDrone(QString)));
+    //QObject::connect(engine.rootContext(), SIGNAL(sendToDrone(QString)),
+    //                                        &controlServer, SLOT(sendToDrone(QString)));
     if (engine.rootObjects().isEmpty())
         return -1;
 

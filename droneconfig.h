@@ -33,6 +33,7 @@ public:
     void setUiMsg(const QString &msg);
     void setSendToDroneFunc(std::function<void(std::string msg)> func);
     void setCmdResult(const QString &msg);
+    void _setVideoBitrate(float bitrate);
 
     // get functions
     bool connectionStatus();
@@ -41,7 +42,7 @@ public:
     bool tryConnect() const;
     int networkRssi() const;
     QString networkType() const;
-    void assingTelemData(float bitrate, int rssi, const std::string networkType, bool videoStatus);
+    void assingTelemData(int rssi, const std::string networkType, bool videoStatus);
     QString serverIp() const;
     QString serverPort() const;
     QString uiMsg();
@@ -68,7 +69,6 @@ public slots:
 
 private:
     // private set functions
-    void _setVideoBitrate(float bitrate);
     void _setNetworkRssi(int rssi);
     void _setNetworkType(const QString &networkType);
 

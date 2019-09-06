@@ -5,28 +5,28 @@ import backend.DroneConfig 1.0
 import QtQuick.Layouts 1.3
 
 Window {
-    height: 282
+    height: 324
     width: 640
     id: root
 
     property var curInCmd: "Enter Command"
 
     function find(model, criteria) {
-      for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return model.get(i)
-      return null
+        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return model.get(i)
+        return null
     }
 
     Component.onCompleted: {
         var file = controlServer.readHistory("history.txt")
         var lines = file.split('\n')
-       for (var i = 0; i < lines.length; i++) {
-           var line = {
-               textIn:lines[i]
-           }
-           if (find(listModel, function(item) { return item.textIn === lines[i] }) === null) {
-               listModel.append(line)
-           }
-       }
+        for (var i = 0; i < lines.length; i++) {
+            var line = {
+                textIn:lines[i]
+            }
+            if (find(listModel, function(item) { return item.textIn === lines[i] }) === null) {
+                listModel.append(line)
+            }
+        }
     }
 
 
@@ -37,7 +37,8 @@ Window {
     MouseArea {
         anchors.fill: parent
         property point lastMousePos: Qt.point(0, 0)
-        anchors.bottomMargin: 33
+        height: 322
+        anchors.bottomMargin: 0
         onPressed: { lastMousePos = Qt.point(mouseX, mouseY); }
         onMouseXChanged: root.x += (mouseX - lastMousePos.x)
         onMouseYChanged: root.y += (mouseY - lastMousePos.y)
@@ -48,7 +49,7 @@ Window {
         x: 0
         y: 0
         width: 640
-        height: 282
+        height: 324
         color: "#9a9797"
         border.color: "#37383d"
         border.width: 2
@@ -104,7 +105,7 @@ Window {
         MouseArea {
             id: closeBtn
             x: 618
-            y: 8
+            y: 5
             width: 14
             height: 12
 
@@ -133,6 +134,63 @@ Window {
             y: 253
             text: qsTr("->")
             font.pixelSize: 13
+        }
+
+        Rectangle {
+            id: missionBlock
+            x: 8
+            y: 277
+            width: 625
+            height: 40
+            color: "#00000000"
+            border.color: "#37383d"
+            border.width: 2
+
+            Rectangle {
+                id: missionNameInputFrame
+                x: 119
+                y: 9
+                width: 359
+                height: 23
+                color: "#00000000"
+                border.color: "#37383d"
+                border.width: 2
+
+                TextInput {
+                    id: missionNameInput
+                    x: 0
+                    y: 8
+                    width: 359
+                    height: 20
+                    echoMode: TextInput.Normal
+                    font.pixelSize: 12
+                }
+
+                Label {
+                    id: missionNameLabel
+                    x: -114
+                    y: 3
+                    text: qsTr("Mission name:")
+                }
+            }
+
+            Button {
+                id: missionStart
+                x: 484
+                y: 9
+                width: 62
+                height: 23
+                text: qsTr("start")
+            }
+
+            Button {
+                id: missionEnd
+                x: 555
+                y: 9
+                width: 62
+                height: 23
+                text: qsTr("end")
+            }
         }
     }
 
@@ -171,4 +229,6 @@ Window {
     ListModel {
         id: listModel
     }
+
+
 }

@@ -135,7 +135,6 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
             if (name == "telem") {
                 _ui_msg_func("Connected");
                json = json["data"].toObject();
-               float bt = std::stof(json["bitrate"].toString().toStdString());
                int rssi = std::stoi(json["rssi"].toString().toStdString());
                //qDebug() << json["video"];
                bool video_status = json["video"].toBool();
@@ -172,7 +171,7 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
                    net_type = "UNKNOWN";
                    break;
                }
-               _telem_func(bt, rssi, net_type, video_status);
+               _telem_func(rssi, net_type, video_status);
                _telem_ac();
             } else if (name == "cmd"){
                 json = json["data"].toObject();
@@ -185,6 +184,10 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
                 }
             } else if (name == "pong") {
                 //currently not defined
+            } else if (name == "bitrate") {
+                float bitrate = static_cast<float>(json["data"].toDouble());
+                _set_bitrate(bitrate);
+                qDebug() << bitrate;
             }
         } else {
             _error_action(error.message());
@@ -200,7 +203,7 @@ void TCPClient::_handle_telem_ac(const boost::system::error_code &error, uint by
     }
 }
 
-void TCPClient::setTelemFunc(std::function<void(float, int, const std::string &, bool)> func) {
+void TCPClient::setTelemFunc(std::function<void(int, const std::string &, bool)> func) {
     _telem_func = func;
 }
 
@@ -265,6 +268,10 @@ void TCPClient::setUiMsgFunc(std::function<void(const std::string &)> func) {
 
 void TCPClient::setCmdResSetFunc(std::function<void (const std::string &)> func){
     _cmdResFunc = func;
+}
+
+void TCPClient::setBitrateSetFunc(std::function<void (float)> func) {
+    _set_bitrate = func;
 }
 
 void TCPClient::_error_action(const std::string &msg){

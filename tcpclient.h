@@ -15,7 +15,7 @@ class TCPClient : public boost::enable_shared_from_this<TCPClient>
 public:
     TCPClient(std::string server_ip, std::string port);
     void async_send(std::string &msg);
-    void setTelemFunc(std::function<void(float, int, const std::string &, bool)> func);
+    void setTelemFunc(std::function<void(int, const std::string &, bool)> func);
     void run();
     void async_read();
     void startConnectTimer();
@@ -25,6 +25,7 @@ public:
     void getTryConnectStatusFunc(std::function<bool()> func);
     void setUiMsgFunc(std::function<void(const std::string &)> func);
     void setCmdResSetFunc(std::function<void (const std::string &)> func);
+    void setBitrateSetFunc(std::function <void(float)> func);
     void startPingPong();
 
 private:
@@ -48,7 +49,7 @@ private:
     boost::array<char, 2048>                                    _in_buf;
     boost::asio::deadline_timer                                 _off_timer;
     boost::asio::deadline_timer                                 _ping_pong_timer;
-    std::function<void(float, int, const std::string, bool)>    _telem_func;
+    std::function<void(int, const std::string, bool)>    _telem_func;
     std::function<void(const bool &connectionStatus)>           _is_con_func;
     std::function<void(const bool &tryConnect)>                 _set_try_connect;
     std::function<bool()>                                       _get_con_status;
@@ -57,6 +58,7 @@ private:
     boost::system::error_code                                   _timer_error;
     std::function<void (const std::string &)>                   _cmdResFunc;
     std::string                                                 _json_ping;
+    std::function <void(float)>                                 _set_bitrate;
 };
 
 #endif // TCPCLIENT_H
