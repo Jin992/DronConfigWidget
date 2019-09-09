@@ -67,8 +67,9 @@ void TCPClient::_handle_connect(const boost::system::error_code &err,
                                  tcp::resolver::iterator endpoint_iterator) {
     if (!err) {
         _connection_status.store(true);
+        _set_server_status(true);
         _is_con_func(true);
-        _ui_msg_func("Connecting to server, please wait.");
+        _ui_msg_func("Connected to server.");
         // launch async read
         std::string key("Radion");
         async_send(key);
@@ -188,6 +189,9 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
                 float bitrate = static_cast<float>(json["data"].toDouble());
                 _set_bitrate(bitrate);
             }
+            else if (name == "drone_status") {
+                _set_drone_status(json["data"].toBool());
+            }
         } else {
             _error_action(error.message());
         }
@@ -273,8 +277,17 @@ void TCPClient::setBitrateSetFunc(std::function<void (float)> func) {
     _set_bitrate = func;
 }
 
+void TCPClient::setServerStatusSetFunc(std::function<void(const bool&)> func) {
+    _set_server_status = func;
+}
+
+void TCPClient::setDroneStatusSetFunc(std::function<void(const bool&)> func) {
+    _set_drone_status = func;
+}
+
 void TCPClient::_error_action(const std::string &msg){
     _is_con_func(false);
+    _set_server_status(false);
     //_set_try_connect(false);
     _io.stop();
     _ui_msg_func(msg);

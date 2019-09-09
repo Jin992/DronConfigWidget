@@ -6,7 +6,7 @@
 DroneConfig::DroneConfig(QObject *parent)
 : QObject(parent), _videoStatus(false), _connectionStatus(false),
   _videoBitrate(0.0), _networkRssi(-128), _networkType("NO_CON"),
-  _try_connect(false), _serverIp("127.0.0.1"), _serverPort("25095"), _net_client(true)
+  _try_connect(false), _serverIp("127.0.0.1"), _serverPort("25095"), _net_client(true), _drone_status(false), _server_status(false)
 {
     setVideoStatus(true);
 }
@@ -193,4 +193,27 @@ void DroneConfig::stop_net_client(){
 
 bool DroneConfig::netClient() const {
     return _net_client;
+}
+
+
+void DroneConfig::setDroneStatus(const bool & status) {
+    if (_drone_status == status)
+        return;
+    _drone_status.store(status);
+    emit droneStatusChanged();
+}
+
+void DroneConfig::setServerStatus(const bool & status) {
+    if (_server_status == status)
+        return;
+    _server_status.store(status);
+    emit serverStatusChanged();
+}
+
+bool DroneConfig::droneStatus() const {
+    return _drone_status;
+}
+
+bool DroneConfig::serverStatus() const {
+    return _server_status;
 }

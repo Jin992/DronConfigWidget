@@ -26,6 +26,8 @@ public:
     void setUiMsgFunc(std::function<void(const std::string &)> func);
     void setCmdResSetFunc(std::function<void (const std::string &)> func);
     void setBitrateSetFunc(std::function <void(float)> func);
+    void setServerStatusSetFunc(std::function<void(const bool &)> func);
+    void setDroneStatusSetFunc(std::function<void(const bool &)> func);
     void startPingPong();
     void stop();
 
@@ -60,6 +62,8 @@ private:
     std::function<void (const std::string &)>                   _cmdResFunc;
     std::string                                                 _json_ping;
     std::function <void(float)>                                 _set_bitrate;
+    std::function<void(const bool&)>                            _set_server_status;
+    std::function<void(const bool&)>                            _set_drone_status;
 };
 
 #endif // TCPCLIENT_H

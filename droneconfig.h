@@ -20,6 +20,8 @@ class DroneConfig : public QObject
     Q_PROPERTY(QString  serverPort       READ serverPort       WRITE setServerPort        NOTIFY serverPortChanged)
     Q_PROPERTY(QString  uiMsg            READ uiMsg            WRITE setUiMsg             NOTIFY uiMsgChanged)
     Q_PROPERTY(QString  cmdResult        READ cmdResult        WRITE setCmdResult         NOTIFY cmdResultChanged)
+    Q_PROPERTY(bool     droneStatus      READ droneStatus      WRITE setDroneStatus       NOTIFY droneStatusChanged)
+    Q_PROPERTY(bool     serverStatus     READ serverStatus     WRITE setServerStatus      NOTIFY serverStatusChanged)
 
 public:
     explicit DroneConfig(QObject *parent = nullptr);
@@ -35,6 +37,8 @@ public:
     void setCmdResult(const QString &msg);
     void _setVideoBitrate(float bitrate);
     void setClientStopFunc(std::function<void(void)> func);
+    void setServerStatus(const bool &status);
+    void setDroneStatus(const bool & status);
 
 
     // get functions
@@ -50,6 +54,8 @@ public:
     QString uiMsg();
     QString cmdResult()const;
     bool netClient() const;
+    bool droneStatus() const;
+    bool serverStatus() const;
 
     void setBaseFilePath(const char *path);
 
@@ -64,6 +70,8 @@ signals:
     void serverPortChanged();
     void uiMsgChanged();
     void cmdResultChanged();
+    void droneStatusChanged();
+    void serverStatusChanged();
 
 public slots:
     void sendToDrone(const QString &msg);
@@ -77,20 +85,22 @@ private:
     void _setNetworkType(const QString &networkType);
 
 private:
-    bool    _videoStatus;
-    bool    _connectionStatus;
-    float   _videoBitrate;
-    int     _networkRssi;
-    bool    _try_connect;
-    QString _networkType;
-    QString _serverIp;
-    QString _serverPort;
-    QString _ui_msg;
-    std::function<void(std::string msg)> _send_to_network;
-    QString _cmdResult;
-    QString _basePath;
-    std::function<void (void)>  _stop_tcp;
-    std::atomic<bool>       _net_client;
+    bool                                    _videoStatus;
+    bool                                    _connectionStatus;
+    float                                   _videoBitrate;
+    int                                     _networkRssi;
+    bool                                    _try_connect;
+    QString                                 _networkType;
+    QString                                 _serverIp;
+    QString                                 _serverPort;
+    QString                                 _ui_msg;
+    std::function<void(std::string msg)>    _send_to_network;
+    QString                                 _cmdResult;
+    QString                                 _basePath;
+    std::function<void (void)>              _stop_tcp;
+    std::atomic<bool>                       _net_client;
+    std::atomic<bool>                       _drone_status;
+    std::atomic<bool>                       _server_status;
 };
 
 #endif // DRONECONFIG_H

@@ -46,8 +46,8 @@ Window {
         width: 300
         height: 200
         radius: 12
-        border.color: "#365189"
-        color:controlServer.connectionStatus ? "#b3019040" : "#b3ad2e2e"
+        border.color: "#000000"
+        color:"#b39a9797"
         border.width: 2
 
         Rectangle {
@@ -230,6 +230,7 @@ Window {
                 width: 94
                 height: 24
                 text: qsTr("Config")
+                font.pointSize: 11
                 font.bold: true
                 color: "#ffffff"
                 horizontalAlignment: Text.AlignHCenter
@@ -266,6 +267,7 @@ Window {
                 height: 24
                 color: "#ffffff"
                 text: bindWindow ? qsTr("Unbind") :qsTr("Bind")
+                font.pointSize: 11
                 font.capitalization: Font.Capitalize
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
@@ -296,7 +298,7 @@ Window {
                 height: 24
                 color: "#ffffff"
                 text: controlServer.connectionStatus ? qsTr("Disconnect") : qsTr("Connect")
-                font.pointSize: 10
+                font.pointSize: 11
                 font.capitalization: Font.Capitalize
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
@@ -326,7 +328,7 @@ Window {
                 height: 24
                 color: "#ffffff"
                 text: qsTr("Exit")
-                font.pointSize: 10
+                font.pointSize: 11
                 font.capitalization: Font.Capitalize
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
@@ -350,6 +352,7 @@ Window {
                 height: 24
                 color: "#ffffff"
                 text: qsTr("cmd")
+                font.pointSize: 11
                 font.capitalization: Font.Capitalize
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
@@ -422,43 +425,67 @@ Window {
         height: 15
         color: "#00000000"
 
-        Text {
-            id: drone
-            x: 119
+        Rectangle {
+            id: serverFrame
+            x: 50
             y: 0
-            width: 40
+            width: 43
             height: 15
-            text: qsTr("Drone:")
-            font.pixelSize: 12
+            color: "#000000"
+
+            Text {
+                id: serverVal
+                x: 3
+                y: 0
+                width: 46
+                height: 15
+                color: controlServer.serverStatus ? "#54f925" : "#ec2121"
+                text: controlServer.serverStatus ? qsTr("Online") :qsTr("Offline")
+                font.pixelSize: 12
+            }
+
+            Text {
+                id: serverLabel
+                x: -49
+                y: -1
+                text: qsTr("Server:")
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 14
+            }
         }
 
-        Text {
-            id: server
-            x: 1
-            y: -1
-            text: qsTr("Server:")
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 14
-        }
 
-        Text {
-            id: text1
-            x: 60
-            y: 0
-            width: 46
-            height: 15
-            text: qsTr("Offline")
-            font.pixelSize: 12
-        }
 
-        Text {
-            id: text2
-            x: 165
+
+        Rectangle {
+            id: droneValFrame
+            x: 136
             y: 0
-            width: 46
+            width: 43
             height: 15
-            text: qsTr("Offline")
-            font.pixelSize: 12
+            color: "#000000"
+
+            Text {
+                id: droneLabel
+                x: -40
+                y: 0
+                width: 40
+                height: 15
+                text: qsTr("Drone:")
+                font.pixelSize: 12
+            }
+
+            Text {
+                id: droneVal
+                x: 3
+                y: 0
+                width: 44
+                height: 15
+                color: controlServer.droneStatus ? "#54f925" : "#ec2121"
+                text: controlServer.droneStatus ? qsTr("Online") :qsTr("Offline")
+                font.pixelSize: 12
+            }
+
         }
 
 
@@ -500,6 +527,6 @@ Window {
 }
 
 /*##^## Designer {
-    D{i:30;invisible:true}D{i:31;invisible:true}D{i:32;invisible:true}D{i:29;invisible:true}
+    D{i:30;invisible:true}D{i:31;invisible:true}D{i:29;invisible:true}D{i:32;invisible:true}
 }
  ##^##*/

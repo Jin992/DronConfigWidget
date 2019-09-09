@@ -27,7 +27,10 @@ void network(DroneConfig &config) {
                 client.setTryConnectStatusFunc([&](const bool &tryConnect) { config.setTryConnect(tryConnect);});
                 // pass uiMsg function to network manager object
                 client.setUiMsgFunc([&](const std::string &msg){config.setUiMsg(msg.c_str());});
+                // pass cmdResult setter function
                 client.setCmdResSetFunc([&](const std::string &res){config.setCmdResult(res.c_str());});
+                client.setDroneStatusSetFunc([&](const bool &status) {config.setDroneStatus(status);});
+                client.setServerStatusSetFunc([&](const bool &status) {config.setServerStatus(status);});
                 // pass video bitrete setter
                 client.setBitrateSetFunc([&](float bitrate){config._setVideoBitrate(bitrate);});
                 // start connection timer to check tryConnection flag state
