@@ -182,7 +182,7 @@ Window {
                 height: 23
                 text: qsTr("start")
                 onClicked: {
-                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ';date) >> /home/pi/Desktop/mission.txt"
+                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ';date) >> /tmp/missionPoint.txt"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
                     print(cmd.toString())
@@ -197,7 +197,7 @@ Window {
                 height: 23
                 text: qsTr("end")
                 onClicked: {
-                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + " ';date) >> /home/pi/Desktop/mission.txt"
+                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + " ';date) >> /tmp/missionPoint.txt"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
                     print(cmd.toString())
