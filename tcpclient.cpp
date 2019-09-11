@@ -287,6 +287,7 @@ void TCPClient::setDroneStatusSetFunc(std::function<void(const bool&)> func) {
 
 void TCPClient::_error_action(const std::string &msg){
     _is_con_func(false);
+    _set_drone_status(false);
     _set_server_status(false);
     //_set_try_connect(false);
     _io.stop();

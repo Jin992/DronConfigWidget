@@ -19,6 +19,7 @@ Window {
     Component.onCompleted: {
         var file = controlServer.readHistory("history.txt")
         var lines = file.split('\n')
+        print(lines)
         for (var i = 0; i < lines.length; i++) {
             var line = {
                 textIn:lines[i]
@@ -71,6 +72,7 @@ Window {
                 y: 4
                 width: 600
                 height: 20
+                text: curInCmd
                 focus: true
                 font.family: "Times New Roman"
                 font.capitalization: Font.AllLowercase
@@ -182,7 +184,7 @@ Window {
                 height: 23
                 text: qsTr("start")
                 onClicked: {
-                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ';date) >> /tmp/missionPoint.txt"
+                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ') >> /tmp/missionPoint.txt"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
                     print(cmd.toString())
@@ -197,7 +199,7 @@ Window {
                 height: 23
                 text: qsTr("end")
                 onClicked: {
-                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + " ';date) >> /tmp/missionPoint.txt"
+                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + "') >> /tmp/missionPoint.txt"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
                     print(cmd.toString())
