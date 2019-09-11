@@ -217,7 +217,7 @@ Window {
         Button {
             id: configBtn
             x: 198
-            y: 119
+            y: 124
             width: 94
             height: 24
             checkable: false
@@ -252,7 +252,7 @@ Window {
         Button {
             id: bindBtn
             x: 198
-            y: 58
+            y: 70
             width: 94
             height: 24
             background: Rectangle {
@@ -283,7 +283,7 @@ Window {
         Button {
             id: cm
             x: 198
-            y: 148
+            y: 151
             width: 94
             height: 24
             background: Rectangle {
@@ -314,7 +314,7 @@ Window {
         DelayButton {
             id: delayButton
             x: 198
-            y: 28
+            y: 15
             width: 94
             height: 24
             background: Rectangle {
@@ -340,7 +340,7 @@ Window {
         Button {
             id: cmdBtn
             x: 198
-            y: 89
+            y: 97
             width: 94
             height: 24
             flat: false
@@ -368,6 +368,37 @@ Window {
                 var component1 = Qt.createComponent("cmdExecutor.qml")
                 var window1    = component1.createObject(this)
                 window1.show()
+            }
+        }
+
+        Button {
+            id: playVideoBtn
+            x: 198
+            y: 42
+            width: 94
+            height: 24
+            Text {
+                id: videoText
+                x: 0
+                y: 4
+                width: 94
+                height: 24
+                color: "#ffffff"
+                text: qsTr("Video")
+                font.bold: true
+                font.capitalization: Font.Capitalize
+                font.pointSize: 11
+                horizontalAlignment: Text.AlignHCenter
+            }
+            highlighted: false
+            flat: false
+            background: Rectangle {
+                color: "#000000"
+                radius: 6
+            }
+            display: AbstractButton.TextOnly
+            onClicked: {
+                controlServer.invoke_ffmpeg()
             }
         }
     }

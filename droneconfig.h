@@ -78,6 +78,7 @@ public slots:
     bool writeHistory(const QString& file, const QString& data);
     QString readHistory(const QString& file);
     void stop_net_client();
+    void invoke_ffmpeg();
 
 private:
     // private set functions

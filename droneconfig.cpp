@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QProcess>
 
 DroneConfig::DroneConfig(QObject *parent)
 : QObject(parent), _videoStatus(false), _connectionStatus(false),
@@ -216,4 +217,9 @@ bool DroneConfig::droneStatus() const {
 
 bool DroneConfig::serverStatus() const {
     return _server_status;
+}
+
+void DroneConfig::invoke_ffmpeg() {
+     QProcess process;
+    process.startDetached(("ffplay tcp://" + _serverIp.toStdString() + ":" + std::to_string(25090)).c_str());
 }
