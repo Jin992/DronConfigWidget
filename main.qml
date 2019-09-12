@@ -17,6 +17,7 @@ Window {
     property bool configWindow: false
     property bool networkConnect: false
     property bool bindWindow: false
+    property var videoBtnLabel: "Video"
 
     property alias exitmsg: exitmsg
     title: qsTr("DroneControlTool")
@@ -246,7 +247,6 @@ Window {
                 var window    = component.createObject(this)
                 window.show()
             }
-
         }
 
         Button {
@@ -384,7 +384,7 @@ Window {
                 width: 94
                 height: 24
                 color: "#ffffff"
-                text: qsTr("Video")
+                text: videoBtnLabel
                 font.bold: true
                 font.capitalization: Font.Capitalize
                 font.pointSize: 11
@@ -393,12 +393,30 @@ Window {
             highlighted: false
             flat: false
             background: Rectangle {
+                id: playVideoBtnBck
                 color: "#000000"
                 radius: 6
             }
             display: AbstractButton.TextOnly
             onClicked: {
+                playVideoBtn.enabled = false
+                playVideoBtnBck.color = "darkGray"
+                print(playVideoBtn.enabled)
+                videoBtnLabel = "wait"
                 controlServer.invoke_ffmpeg()
+                videoBtnTimer.start()
+            }
+            Timer {
+                id:videoBtnTimer
+                interval: 10000
+                repeat: false
+                running: false
+                onTriggered: {
+                    playVideoBtn.enabled = true
+                    playVideoBtnBck.color = "#000000"
+                    videoBtnLabel = "Video"
+                    print("stop timer")
+                }
             }
         }
     }
