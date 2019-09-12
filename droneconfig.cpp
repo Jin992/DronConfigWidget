@@ -57,9 +57,9 @@ void DroneConfig::_setNetworkRssi(int rssi) {
 }
 
 void DroneConfig::setCmdResult(const QString &msg){
-    if (msg == _cmdResult)
-        return;
-    _cmdResult = msg;
+    //if (msg == _cmdResult)
+    //    return;
+    _cmdResult.append(msg);
     emit cmdResultChanged();
 }
 
