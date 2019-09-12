@@ -9,7 +9,7 @@ Window {
     width: 640
     id: root
 
-    property var curInCmd: "Enter Command"
+    property string curInCmd: ""
 
     function find(model, criteria) {
         for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return model.get(i)
@@ -58,9 +58,9 @@ Window {
 
         Rectangle {
             id: cmdInputFrame
-            x: 30
+            x: 77
             y: 250
-            width: 604
+            width: 557
             height: 24
             color: "#00000000"
             border.color: "#37383d"
@@ -70,7 +70,7 @@ Window {
                 id: cmdInput
                 x: 4
                 y: 4
-                width: 600
+                width: 553
                 height: 20
                 text: curInCmd
                 focus: true
@@ -132,9 +132,12 @@ Window {
 
         Text {
             id: inLabel
-            x: 13
-            y: 253
-            text: qsTr("->")
+            x: 9
+            y: 254
+            width: 64
+            height: 16
+            color: "#26282a"
+            text: qsTr("Command:")
             font.pixelSize: 13
         }
 
