@@ -182,6 +182,7 @@ Window {
                 y: 9
                 width: 62
                 height: 23
+                enabled: missionNameInput.activeFocus
                 text: qsTr("start")
                 onClicked: {
                     var query = "(echo -n 'MISSION START " + missionNameInput.text + " ') >> /tmp/missionPoint.txt"
@@ -197,6 +198,7 @@ Window {
                 y: 9
                 width: 62
                 height: 23
+                enabled: missionNameInput.activeFocus
                 text: qsTr("end")
                 onClicked: {
                     var query = "(echo -n 'MISSION STOP " + missionNameInput.text + "') >> /tmp/missionPoint.txt"
