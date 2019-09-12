@@ -15,21 +15,24 @@ Window {
     property var curIp: "127.0.0.1:25095"
 
     function find(model, criteria) {
-      for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return model.get(i)
-      return null
+        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return i
+        return false
     }
 
     Component.onCompleted: {
         var file = controlServer.readHistory("config.txt")
         var lines = file.split('\n')
-       for (var i = 0; i < lines.length; i++) {
+        for (var i = 0; i < lines.length; i++) {
            var line = {
                textIn:lines[i]
            }
-           if (find(listModelIp, function(item) { return item.textIn === lines[i] }) === null) {
+           if (find(listModelIp, function(item) { return item.textIn === lines[i] }) === false) {
                listModelIp.append(line)
            }
-       }
+        }
+        if (listModelIp.count > 1)
+        curIp = listModelIp.get(1).textIn
+
     }
 
     MouseArea {
@@ -162,14 +165,17 @@ Window {
                 text: qsTr("Apply")
                 property variant stringList
                 onClicked: {
-                    stringList = curIp.split(":")
+                    stringList = serverIpValue.text.split(":")
                     print(stringList[0])
                     print(stringList[1])
                     var line = {
                         textIn:serverIpValue.text
                     }
-                    if (find(listModelIp, function(item) { return item.textIn === serverIpValue.text }) === null) {
-                        listModelIp.append(line)
+                    var elem = find(listModelIp, function(item) { return item.textIn === serverIpValue.text })
+                    if (elem === false) {
+                        listModelIp.insert(1, line)
+                    } else {
+                       listModelIp.move(elem, 1,1)
                     }
                     controlServer.serverIp = stringList[0]
                     controlServer.serverPort = stringList[1]

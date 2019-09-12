@@ -12,19 +12,20 @@ Window {
     property string curInCmd: ""
 
     function find(model, criteria) {
-        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return model.get(i)
-        return null
+        for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return i
+        return false
     }
 
     Component.onCompleted: {
         var file = controlServer.readHistory("history.txt")
         var lines = file.split('\n')
+        //lines = lines.reverse()
         print(lines)
         for (var i = 0; i < lines.length; i++) {
             var line = {
                 textIn:lines[i]
             }
-            if (find(listModel, function(item) { return item.textIn === lines[i] }) === null) {
+            if (find(listModel, function(item) { return item.textIn === lines[i] }) === false) {
                 listModel.append(line)
             }
         }
@@ -82,8 +83,11 @@ Window {
                     var line = {
                         textIn:cmdInput.text
                     }
-                    if (find(listModel, function(item) { return item.textIn === cmdInput.text }) === null) {
-                        listModel.append(line)
+                    var elem = find(listModel, function(item) { return item.textIn === cmdInput.text })
+                    if (elem === false) {
+                        listModel.insert(1, line)
+                    } else {
+                       listModel.move(elem, 1,1)
                     }
                     controlServer.sendToDrone("{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + cmdInput.text + "\"}}")
 
