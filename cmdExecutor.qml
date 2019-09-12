@@ -223,14 +223,12 @@ Window {
         border.color: "#37383d"
         border.width: 2
 
-
         ScrollView {
-            id: scrollView
+           id: scrollView
             x: 0
             y: 0
             width: 620
             height: 228
-
             TextArea {
                 id: cmdOut
                 x: 0
