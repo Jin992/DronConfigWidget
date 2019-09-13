@@ -52,7 +52,7 @@ Window {
         y: 0
         width: 640
         height: 324
-        color: "#9a9797"
+        color: "#c0c3c4"
         border.color: "#37383d"
         border.width: 2
 
@@ -233,6 +233,7 @@ Window {
             y: 0
             width: 620
             height: 228
+            clip: true
             TextArea {
                 id: cmdOut
                 x: 0

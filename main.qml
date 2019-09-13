@@ -48,7 +48,7 @@ Window {
         height: 200
         radius: 12
         border.color: "#000000"
-        color:"#b39a9797"
+        color:"#639386"
         border.width: 2
 
         Rectangle {

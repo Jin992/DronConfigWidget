@@ -7,6 +7,7 @@ Window {
     id: root
     width: 640
     height: 480
+    color: "#c0c3c4"
 
     flags: Qt.FramelessWindowHint |
            Qt.WindowMinimizeButtonHint |
@@ -31,7 +32,12 @@ Window {
            }
         }
         if (listModelIp.count > 1)
-        curIp = listModelIp.get(1).textIn
+            curIp = listModelIp.get(1).textIn
+        var cred = serverIpValue.text.split(":")
+        print(cred[0])
+        print(cred[1])
+        controlServer.serverIp = cred[0]
+        controlServer.serverPort = cred[1]
 
     }
 
