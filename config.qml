@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.4
 import backend.DroneConfig 1.0
 
 Window {
@@ -14,22 +14,39 @@ Window {
            Qt.Window | Qt.WindowStaysOnTopHint
 
     property var curIp: "127.0.0.1:25095"
+    property var dparam: ""
+    property var dvalue:  ""
+    property var dparamDescript: []
+    property var dparamName: []
+
+    function getParamId(paramStr){
+        var splited = paramStr.split(':')
+        return splited[0]
+    }
+    function getParamValue(paramStr){
+        var splited = paramStr.split(':')
+        return splited[1]
+    }
 
     function find(model, criteria) {
         for(var i = 0; i < model.count; ++i) if (criteria(model.get(i))) return i
         return false
     }
 
+    function paramForm(paramName) {
+
+    }
+
     Component.onCompleted: {
         var file = controlServer.readHistory("config.txt")
         var lines = file.split('\n')
         for (var i = 0; i < lines.length; i++) {
-           var line = {
-               textIn:lines[i]
-           }
-           if (find(listModelIp, function(item) { return item.textIn === lines[i] }) === false) {
-               listModelIp.append(line)
-           }
+            var line = {
+                textIn:lines[i]
+            }
+            if (find(listModelIp, function(item) { return item.textIn === lines[i] }) === false) {
+                listModelIp.append(line)
+            }
         }
         if (listModelIp.count > 1)
             curIp = listModelIp.get(1).textIn
@@ -39,6 +56,9 @@ Window {
         controlServer.serverIp = cred[0]
         controlServer.serverPort = cred[1]
 
+        var fileDecription = controlServer.readHistory("paramDesc.txt")
+        var descriptionLines = fileDecription.split('\n')
+        print(descriptionLines)
     }
 
     MouseArea {
@@ -58,35 +78,6 @@ Window {
         height: 445
         color: "#00000000"
         border.width: 2
-
-        Rectangle {
-            id: additionalSettings
-            x: 407
-            y: 29
-            width: 188
-            height: 375
-            color: "#00000000"
-            border.width: 2
-
-            Rectangle {
-                id: additionalSettingsLabelFrame
-                x: 0
-                y: -14
-                width: 140
-                height: 14
-                color: "#000000"
-
-                Text {
-                    id: additionalSettingsLabel
-                    x: 11
-                    y: 0
-                    color: "#ffffff"
-                    text: qsTr("Additional Settings")
-                    font.bold: true
-                    font.pixelSize: 12
-                }
-            }
-        }
 
         Rectangle {
             id: networkSettings
@@ -166,8 +157,10 @@ Window {
 
             Button {
                 id: networkSettingsApply
-                x: 53
-                y: 341
+                x: 52
+                y: 344
+                width: 85
+                height: 24
                 text: qsTr("Apply")
                 property variant stringList
                 onClicked: {
@@ -181,7 +174,7 @@ Window {
                     if (elem === false) {
                         listModelIp.insert(1, line)
                     } else {
-                       listModelIp.move(elem, 1,1)
+                        listModelIp.move(elem, 1,1)
                     }
                     controlServer.serverIp = stringList[0]
                     controlServer.serverPort = stringList[1]
@@ -199,354 +192,10 @@ Window {
             id: videoSettigns
             x: 208
             y: 29
-            width: 188
+            width: 398
             height: 375
             color: "#00000000"
             border.width: 2
-
-            Rectangle {
-                id: incBitrate
-                x: 8
-                y: 18
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                TextInput {
-                    id: incBitrateInput
-                    x: 0
-                    y: 1
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    inputMask: ""
-                    echoMode: TextInput.NoEcho
-                    font.pixelSize: 12
-                }
-
-                Text {
-                    id: incBitrateLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Bitrate increase rate:")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: videoHeight
-                x: 8
-                y: 284
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: videoHeightLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Video height")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: videoHeightInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: videoReconnectionTimeout
-                x: 8
-                y: 256
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                TextInput {
-                    id: videoReconnectionTimeoutInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-
-                Text {
-                    id: videoReconnectionTimeoutLabel
-                    x: 0
-                    y: -14
-                    width: 157
-                    height: 14
-                    text: qsTr("Video reconnection timeout:")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: minimalLatencyUpgTime
-                x: 8
-                y: 226
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: minimalLatencyUpgLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Minimal latency upgrade times:")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: minimalLatencyUpgInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: minimalLatencyTS
-                x: 8
-                y: 196
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                TextInput {
-                    id: minimalLatencyTSInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-
-                Text {
-                    id: minimalLatencyTSLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Minimal latency time slot:")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: avLatencyUpgTime
-                x: 8
-                y: 166
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: avLatencyUpgTimeLabel
-                    x: 0
-                    y: -14
-                    width: 166
-                    height: 14
-                    text: qsTr("Avarage latency upgrade times:")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: avLatencyUpgTimeInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: avLatencyTS
-                x: 8
-                y: 137
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: avLatencyTSLabel
-                    x: 0
-                    y: -14
-                    width: 142
-                    height: 14
-                    text: qsTr("Avarage latency time slot:")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: avLatencyTSInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: latencyThreshold
-                x: 8
-                y: 106
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: latencyThresholdLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Latency threshold:")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: latencyThresholdInput
-                    x: 0
-                    y: 0
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: periodBitrate
-                x: 8
-                y: 77
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                Text {
-                    id: periodBitrateLabel
-                    x: 0
-                    y: -14
-                    width: 127
-                    height: 14
-                    text: qsTr("Bitrate inc/dec period:")
-                    font.pixelSize: 12
-                }
-
-                TextInput {
-                    id: periodBitrateInput
-                    x: 0
-                    y: 1
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: decBitrate
-                x: 8
-                y: 47
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-
-                TextInput {
-                    id: decBitrateInput
-                    x: 0
-                    y: 1
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                }
-
-                Text {
-                    id: decBitrateLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Bitrate decrease rate:")
-                    font.pixelSize: 12
-                }
-            }
-
-            Rectangle {
-                id: videoWidth
-                x: 8
-                y: 313
-                width: 168
-                height: 15
-                color: "#ffffff"
-                radius: 0
-                border.width: 2
-                TextInput {
-                    id: videoWidthInput
-                    x: 0
-                    y: 1
-                    width: 157
-                    height: 14
-                    text: qsTr("Text Input")
-                    font.pixelSize: 12
-                    echoMode: TextInput.NoEcho
-                    inputMask: ""
-                }
-
-                Text {
-                    id: videoWidthLabel
-                    x: 0
-                    y: -14
-                    width: 110
-                    height: 14
-                    text: qsTr("Video width")
-                    font.pixelSize: 12
-                }
-            }
 
             Rectangle {
                 id: videoSettingsLabelFrame
@@ -558,12 +207,9 @@ Window {
 
                 Text {
                     id: videoSettingsLabel
-                    x: 8
-                    y: 0
-                    width: 101
-                    height: 14
                     color: "#ffffff"
-                    text: qsTr("Video Settings")
+                    text: qsTr("Drone Parameters")
+                    anchors.fill: parent
                     font.bold: true
                     font.pixelSize: 12
                 }
@@ -571,20 +217,115 @@ Window {
 
             Button {
                 id: getParamBtn
-                x: 13
-                y: 341
+                x: 156
+                y: 312
                 width: 89
                 height: 26
                 text: qsTr("Get Params")
+                onClicked: {
+                    var query = "{\"id\":0,\"name\":\"param\",\"data\":{\"cmd\":\"list\"}}"
+                    controlServer.sendToDrone(qsTr(query))
+                }
             }
 
-            Button {
-                id: applyParamBtn
-                x: 115
-                y: 341
-                width: 61
-                height: 26
-                text: qsTr("Apply")
+            ComboBox {
+                id: comboBox
+                x: 10
+                y: 8
+                width: 380
+                height: 32
+                model: controlServer.paramList
+            }
+
+            Rectangle {
+                id: paramBlock
+                x: 8
+                y: 49
+                width: 382
+                height: 221
+                color: "#00000000"
+                border.width: 2
+
+                Rectangle {
+                    id: paramValueFRAME
+                    x: 6
+                    y: 161
+                    width: 368
+                    height: 19
+                    color: "#00000000"
+                    border.width: 2
+
+                    TextInput {
+                        id: paramValue
+                        text: getParamValue(comboBox.currentText)
+                        anchors.topMargin: 2
+                        anchors.leftMargin: 4
+                        anchors.fill: parent
+                        font.pixelSize: 12
+                    }
+                }
+
+                Label {
+                    id: paramName
+                    x: 6
+                    y: 28
+                    width: 368
+                    height: 16
+                    text: getParamId(comboBox.currentText)
+                }
+
+                TextArea {
+                    id: shortDescript
+                    x: 6
+                    y: 66
+                    width: 368
+                    height: 75
+                    text: comboBox.currentText
+                }
+
+                Button {
+                    id: setValueButton
+                    x: 148
+                    y: 192
+                    width: 87
+                    height: 21
+                    text: qsTr("Set value")
+                    onClicked: {
+                        var query = "{\"id\":0,\"name\":\"param\",\"data\":{\"cmd\":\"set\", \"param_id\":\""+ getParamId(comboBox.currentText)
+                                +"\", \"value\":" + paramValue.text + "}}"
+                        print(query)
+                        controlServer.sendToDrone(qsTr(query))
+                        var queryList = "{\"id\":0,\"name\":\"param\",\"data\":{\"cmd\":\"list\"}}"
+                        controlServer.sendToDrone(qsTr(queryList))
+                    }
+                }
+
+                Label {
+                    id: paramValueLabel
+                    x: 6
+                    y: 144
+                    width: 78
+                    height: 16
+                    text: qsTr("Param value:")
+                }
+
+                Label {
+                    id: label
+                    x: 6
+                    y: 8
+                    width: 158
+                    height: 16
+                    text: qsTr("Parameter name:")
+                }
+
+                Label {
+                    id: label1
+                    x: 6
+                    y: 50
+                    width: 160
+                    height: 16
+                    text: qsTr("Parameter description:")
+                }
             }
         }
 
@@ -611,8 +352,10 @@ Window {
 
         Button {
             id: closeBtn
-            x: 512
-            y: 414
+            x: 504
+            y: 408
+            width: 90
+            height: 30
             text: qsTr("Close")
             onClicked: { var strToWrite = ""
                 for(var i = 0; i < listModelIp.count; ++i) {
@@ -648,3 +391,8 @@ Window {
     //    }
 
 }
+
+/*##^## Designer {
+    D{i:16;anchors_height:15;anchors_width:102;anchors_x:8;anchors_y:0}D{i:22;anchors_height:20;anchors_width:156;anchors_x:4;anchors_y:2}
+}
+ ##^##*/

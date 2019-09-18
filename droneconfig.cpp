@@ -223,3 +223,12 @@ void DroneConfig::invoke_ffmpeg() {
      QProcess process;
     process.startDetached(("ffplay tcp://" + _serverIp.toStdString() + ":" + std::to_string(25090)).c_str());
 }
+
+void DroneConfig::setParamList(const QStringList & list) {
+    _param_list = list;
+    emit paramListChanged();
+}
+
+QStringList DroneConfig::paramList() const {
+    return _param_list;
+}

@@ -19,6 +19,7 @@ void network(DroneConfig &config) {
                 config.setClientStopFunc([&](){client.stop();});
                 // pass connection set function from UI to network manager object
                 client.setConnectionStatusFunc([&](const bool &connectionStatus){config.setConnectionStatus(connectionStatus);});
+                client.setParamListSetFunc([&](const QStringList &list){config.setParamList(list);});
                 // pass telemetry set function from UI to network manager object
                 client.setTelemFunc([&](int rssi, const std::string &net_type, bool videoStatus) { config.assingTelemData(rssi, net_type, videoStatus);});
                 // pass tryConnection flag get function from UI to network manager object

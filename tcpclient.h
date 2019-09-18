@@ -7,6 +7,7 @@
 #include <atomic>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/array.hpp>
+#include <QStringList>
 
 using boost::asio::ip::tcp;
 
@@ -28,6 +29,7 @@ public:
     void setBitrateSetFunc(std::function <void(float)> func);
     void setServerStatusSetFunc(std::function<void(const bool &)> func);
     void setDroneStatusSetFunc(std::function<void(const bool &)> func);
+    void setParamListSetFunc(std::function<void(const QStringList &)> func);
     void startPingPong();
     void stop();
 
@@ -64,6 +66,7 @@ private:
     std::function <void(float)>                                 _set_bitrate;
     std::function<void(const bool&)>                            _set_server_status;
     std::function<void(const bool&)>                            _set_drone_status;
+    std::function<void(const QStringList &)>                    _set_param_list;
 };
 
 #endif // TCPCLIENT_H

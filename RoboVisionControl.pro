@@ -34,5 +34,5 @@ HEADERS += \
     droneconfig.h \
     tcpclient.h
 
-INCLUDEPATH += C:\boost_1_67_0
-LIBS += "-LC:\boost_1_67_0\lib32-msvc-14.0"
+INCLUDEPATH += /usr/local/Cellar/boost/1.70.0/include
+LIBS += "-L/usr/local/Cellar/boost/1.70.0/lib"

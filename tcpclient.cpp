@@ -192,6 +192,18 @@ void TCPClient::_handle_read(const boost::system::error_code &error, uint bytes_
             else if (name == "drone_status") {
                 _set_drone_status(json["data"].toBool());
             }
+            else if (name == "param") {
+                json = json["data"].toObject();
+                if (json["cmd"] == "list_ack"){
+                    QString param_list = json["data"].toString();
+                    QStringList list = param_list.split("\n");
+                    QStringList reversed;
+                    reversed.reserve(list.size());
+                    std::reverse_copy(list.begin(), list.end(), std::back_inserter(reversed));
+                    _set_param_list(reversed);
+                    qDebug() << param_list;
+                }
+            }
         } else {
             _error_action(error.message());
         }
@@ -283,6 +295,10 @@ void TCPClient::setServerStatusSetFunc(std::function<void(const bool&)> func) {
 
 void TCPClient::setDroneStatusSetFunc(std::function<void(const bool&)> func) {
     _set_drone_status = func;
+}
+
+void TCPClient::setParamListSetFunc(std::function<void(const QStringList &)> func){
+    _set_param_list = func;
 }
 
 void TCPClient::_error_action(const std::string &msg){

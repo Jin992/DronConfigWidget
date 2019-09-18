@@ -6,6 +6,7 @@
 #include <tcpclient.h>
 #include <QtDebug>
 #include <string>
+#include <QStringList>
 
 class DroneConfig : public QObject
 {
@@ -22,6 +23,7 @@ class DroneConfig : public QObject
     Q_PROPERTY(QString  cmdResult        READ cmdResult        WRITE setCmdResult         NOTIFY cmdResultChanged)
     Q_PROPERTY(bool     droneStatus      READ droneStatus      WRITE setDroneStatus       NOTIFY droneStatusChanged)
     Q_PROPERTY(bool     serverStatus     READ serverStatus     WRITE setServerStatus      NOTIFY serverStatusChanged)
+    Q_PROPERTY(QStringList paramList     READ paramList        WRITE setParamList         NOTIFY paramListChanged)
 
 public:
     explicit DroneConfig(QObject *parent = nullptr);
@@ -39,6 +41,7 @@ public:
     void setClientStopFunc(std::function<void(void)> func);
     void setServerStatus(const bool &status);
     void setDroneStatus(const bool & status);
+    void setParamList(const QStringList &list);
 
 
     // get functions
@@ -56,8 +59,9 @@ public:
     bool netClient() const;
     bool droneStatus() const;
     bool serverStatus() const;
-
+    QStringList &param_list(){return _param_list;}
     void setBaseFilePath(const char *path);
+    QStringList paramList() const;
 
 signals:
     void videoStatusChanged();
@@ -72,6 +76,8 @@ signals:
     void cmdResultChanged();
     void droneStatusChanged();
     void serverStatusChanged();
+    void paramListChanged();
+
 
 public slots:
     void sendToDrone(const QString &msg);
@@ -102,6 +108,7 @@ private:
     std::atomic<bool>                       _net_client;
     std::atomic<bool>                       _drone_status;
     std::atomic<bool>                       _server_status;
+    QStringList                             _param_list;
 };
 
 #endif // DRONECONFIG_H

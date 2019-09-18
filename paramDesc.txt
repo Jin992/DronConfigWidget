@@ -1,0 +1,12 @@
+bitrate_threshold:Theshold latency after wich bitrate decrease, measure in milliseconds.
+bitrate_increase_rate:Bitrate increase amount, measure in %.
+bitrate_decrease_rate:Bitreate decrease amount, measure in %.
+bitrate_change_period: Bitrate increse/decrese time slot size, measuse in milliseconds.
+average_latency_time_slot:Average latency algorithm time slot value (time_slot/update).
+average_latency_update_rate:Averate latency algorithm update times (time_slot/update).
+minimal_latency_time_slot:Minimal latency algorithm time slot value (time_slot/update).
+minimal_latency_update:Minimsl latency algorithm update times (time_slot/update).
+video_reconnect_timeout:Video reconnect timeout, measure in seconds.
+video_width:Video width, measure in px.
+video_height:Video height, measure in px.
+video_fps:Video fps, measure in frames/sec.
