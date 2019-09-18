@@ -18,6 +18,7 @@ Window {
     property var dvalue:  ""
     property var dparamDescript: []
     property var dparamName: []
+    property var map: new Object()
 
     function getParamId(paramStr){
         var splited = paramStr.split(':')
@@ -33,8 +34,12 @@ Window {
         return false
     }
 
-    function paramForm(paramName) {
+    function mapValue(key) {
+        return map[key]
+    }
 
+    function setMapValue(key, value) {
+        map[key] = value
     }
 
     Component.onCompleted: {
@@ -58,7 +63,13 @@ Window {
 
         var fileDecription = controlServer.readHistory("paramDesc.txt")
         var descriptionLines = fileDecription.split('\n')
-        print(descriptionLines)
+
+        for (var j = 0; j < descriptionLines.length; j++) {
+            var tmp = descriptionLines[j].split(':')
+            setMapValue(tmp[0],tmp[1])
+            print(tmp[0])
+        }
+
     }
 
     MouseArea {
@@ -280,7 +291,8 @@ Window {
                     y: 66
                     width: 368
                     height: 75
-                    text: comboBox.currentText
+                    wrapMode: Text.WordWrap
+                    text: mapValue(getParamId(comboBox.currentText))
                 }
 
                 Button {
