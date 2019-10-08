@@ -173,6 +173,11 @@ Window {
                     height: 20
                     echoMode: TextInput.Normal
                     font.pixelSize: 12
+                    onTextChanged: {
+                        missionStart.enabled = true
+                        missionEnd.enabled = true
+                    }
+
                 }
 
                 Label {
@@ -189,13 +194,15 @@ Window {
                 y: 9
                 width: 62
                 height: 23
-                enabled: missionNameInput.activeFocus
+                enabled: false
                 text: qsTr("start")
                 onClicked: {
-                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ') >> /tmp/missionPoint.txt"
+                    var query = "(echo -n 'MISSION START " + missionNameInput.text + " ') >> /tmp/missionPoint.txt && echo 'Start point has been saved'"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
+                    print("Mision start")
                     print(cmd.toString())
+                    enabled = false
                 }
             }
 
@@ -205,13 +212,14 @@ Window {
                 y: 9
                 width: 62
                 height: 23
-                enabled: missionNameInput.activeFocus
+                enabled: false
                 text: qsTr("end")
                 onClicked: {
-                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + "') >> /tmp/missionPoint.txt"
+                    var query = "(echo -n 'MISSION STOP " + missionNameInput.text + "') >> /tmp/missionPoint.txt && echo 'End point has been saved'"
                     var cmd = "{\"id\":0,\"name\":\"cmd\",\"data\":{\"system\":\"exec\",\"action\":\"" + query + "\"}}"
                     controlServer.sendToDrone(cmd.toString())
                     print(cmd.toString())
+                    enabled = false
                 }
             }
         }
